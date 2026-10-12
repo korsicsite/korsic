@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korisic · Fortnite Offsets</title>
+    <!-- Font Awesome per icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --viola-principale: #a855f7;
+            --viola-scuro: #7e22ce;
+            --viola-profondo: #4c1d95;
+            --viola-chiaro: #c084fc;
+            --viola-luminoso: #d8b4fe;
+            --sfondo: #0b0612;
+            --sfondo-card: #150e1f;
+            --sfondo-card-hover: #1f1430;
+            --bordo: #2e1b4a;
+            --testo: #f3e8ff;
+            --testo-secondario: #c4b5d4;
+            --successo: #4ade80;
+            --ombra: rgba(168, 85, 247, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--sfondo);
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(124, 58, 237, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 70%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.08) 0%, transparent 70%);
+            background-attachment: fixed;
+            color: var(--testo);
+            min-height: 100vh;
+            padding: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Animazioni */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px rgba(168, 85, 247, 0.3), 0 0 15px rgba(168, 85, 247, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.7), 0 0 40px rgba(168, 85, 247, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(168, 85, 247, 0.3), 0 0 15px rgba(168, 85, 247, 0.1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes spinSlow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem 2rem;
+            background: rgba(21, 14, 31, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid var(--bordo);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(168, 85, 247, 0.15) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(168, 85, 247, 0.08), transparent, rgba(168, 85, 247, 0.08), transparent);
+            animation: spinSlow 12s linear infinite;
+            pointer-events: none;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            z-index: 1;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--viola-principale), var(--viola-scuro));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: white;
+            box-shadow: 0 4px 20px var(--ombra);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text .brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, var(--viola-chiaro) 50%, var(--viola-principale) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+
+        .logo-text .sub {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--testo-secondario);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            z-index: 1;
+        }
+
+        .version-badge {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--viola-chiaro);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .version-badge i {
+            font-size: 0.9rem;
+        }
+
+        .update-status {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            color: var(--testo-secondario);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--successo);
+            box-shadow: 0 0 10px var(--successo);
+            animation: glowPulse 2s infinite;
+        }
+
+        /* Azioni */
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+            max-width: 500px;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--testo-secondario);
+            font-size: 0.95rem;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 3rem;
+            background: var(--sfondo-card);
+            border: 1px solid var(--bordo);
+            border-radius: 1rem;
+            color: var(--testo);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--viola-principale);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15), 0 0 20px rgba(168, 85, 247, 0.1);
+        }
+
+        .search-wrapper input::placeholder {
+            color: #6b5b7d;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--viola-scuro), var(--viola-principale));
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 1rem;
+            color: white;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--ombra);
+            white-space: nowrap;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        .refresh-btn i {
+            transition: transform 0.5s ease;
+        }
+
+        .refresh-btn.loading i {
+            animation: spinSlow 1s linear infinite;
+        }
+
+        /* Griglia */
+        .offsets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: var(--sfondo-card);
+            border: 1px solid var(--bordo);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease-out backwards;
+            cursor: default;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--viola-principale), var(--viola-chiaro), var(--viola-principale));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--sfondo-card-hover);
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.08);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--viola-chiaro);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card-title i {
+            font-size: 0.9rem;
+            color: var(--viola-principale);
+        }
+
+        .card-count {
+            font-size: 0.7rem;
+            background: rgba(168, 85, 247, 0.12);
+            color: var(--viola-luminoso);
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .offset-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.45rem 0.6rem;
+            margin: 0 -0.6rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .offset-row:hover {
+            background: rgba(168, 85, 247, 0.06);
+        }
+
+        .offset-name {
+            color: var(--testo-secondario);
+            font-weight: 500;
+            font-family: 'Inter', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 0.75rem;
+        }
+
+        .offset-value {
+            color: var(--viola-luminoso);
+            font-weight: 700;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            background: rgba(168, 85, 247, 0.08);
+            padding: 0.15rem 0.6rem;
+            border-radius: 0.4rem;
+            font-size: 0.8rem;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .offset-row:hover .offset-value {
+            background: rgba(168, 85, 247, 0.18);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
+        }
+
+        /* Stato caricamento */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 3px solid rgba(168, 85, 247, 0.15);
+            border-top-color: var(--viola-principale);
+            border-radius: 50%;
+            animation: spinSlow 0.9s linear infinite;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+
+        .loading-state p {
+            color: var(--testo-secondario);
+            font-size: 0.95rem;
+        }
+
+        .error-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(220, 38, 38, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 1.25rem;
+        }
+
+        .error-state i {
+            font-size: 2.5rem;
+            color: #f87171;
+            margin-bottom: 1rem;
+        }
+
+        .error-state h3 {
+            color: #fca5a5;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-state p {
+            color: var(--testo-secondario);
+            font-size: 0.9rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Empty state */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--testo-secondario);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--viola-principale);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            text-align: center;
+            border-top: 1px solid var(--bordo);
+            color: var(--testo-secondario);
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer .credit {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer a {
+            color: var(--viola-chiaro);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--viola-luminoso);
+            text-decoration: underline;
+        }
+
+        .footer .heart {
+            color: var(--viola-principale);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--sfondo);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--viola-scuro);
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--viola-principale);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1.25rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .offsets-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                max-width: 100%;
+            }
+
+            .refresh-btn {
+                justify-content: center;
+            }
+        }
+
+        /* Evidenzia ricerca */
+        .offset-row.hidden {
+            display: none;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand">Korisic</span>
+                    <span class="sub">Fortnite Offsets</span>
+                </div>
+            </div>
+            <div class="header-info">
+                <div class="version-badge" id="versionBadge">
+                    <i class="fas fa-tag"></i>
+                    <span id="versionText">Caricamento...</span>
+                </div>
+                <div class="update-status">
+                    <span class="status-dot"></span>
+                    <span id="updateText">Live API</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Barra azioni -->
+        <div class="actions-bar">
+            <div class="search-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cerca offset o classe..." autocomplete="off">
+            </div>
+            <button class="refresh-btn" id="refreshBtn">
+                <i class="fas fa-rotate-right"></i>
+                Aggiorna
+            </button>
+        </div>
+
+        <!-- Griglia offsets -->
+        <div class="offsets-grid" id="offsetsGrid">
+            <div class="loading-state" id="loadingState">
+                <div class="spinner"></div>
+                <p>Recupero offsets da xerozify.xyz...</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="credit">
+                <i class="fas fa-database"></i>
+                <span>Dati forniti da <a href="https://xerozify.xyz" target="_blank" rel="noopener">xerozify.xyz</a></span>
+            </div>
+            <div>
+                <i class="fas fa-heart heart"></i> Korisic · offsets aggiornati in tempo reale
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const API_URL = 'https://xerozify.xyz/api/offsets/games/fortnite/current';
+            const grid = document.getElementById('offsetsGrid');
+            const versionText = document.getElementById('versionText');
+            const updateText = document.getElementById('updateText');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const searchInput = document.getElementById('searchInput');
+            const loadingState = document.getElementById('loadingState');
+
+            let allCards = [];
+            let allRows = [];
+
+            // ---- Utility ----
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ---- Rendering ----
+            function renderOffsets(data) {
+                const offsets = data.offsets_flat;
+                if (!offsets || typeof offsets !== 'object') {
+                    throw new Error('Formato offsets non valido');
+                }
+
+                // Raggruppa per classe (parte prima di "::")
+                const grouped = {};
+                for (const [key, value] of Object.entries(offsets)) {
+                    const parts = key.split('::');
+                    let className, offsetName;
+                    if (parts.length >= 2) {
+                        className = parts.slice(0, -1).join('::');
+                        offsetName = parts[parts.length - 1];
+                    } else {
+                        className = 'Globals';
+                        offsetName = key;
+                    }
+
+                    if (!grouped[className]) {
+                        grouped[className] = [];
+                    }
+                    grouped[className].push({ name: offsetName, value });
+                }
+
+                // Ordina classi: Globals prima, poi alfabetico
+                const sortedClasses = Object.keys(grouped).sort((a, b) => {
+                    if (a === 'Globals') return -1;
+                    if (b === 'Globals') return 1;
+                    return a.localeCompare(b);
+                });
+
+                // Pulisci griglia
+                grid.innerHTML = '';
+
+                if (sortedClasses.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nessun offset disponibile</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Crea card
+                allCards = [];
+                allRows = [];
+
+                sortedClasses.forEach((className, index) => {
+                    const items = grouped[className];
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.animationDelay = (index * 0.05) + 's';
+                    card.dataset.className = className.toLowerCase();
+
+                    const header = document.createElement('div');
+                    header.className = 'card-header';
+                    header.innerHTML = `
+                        <div class="card-title">
+                            <i class="fas fa-cube"></i>
+                            ${escapeHtml(className)}
+                        </div>
+                        <span class="card-count">${items.length}</span>
+                    `;
+                    card.appendChild(header);
+
+                    const body = document.createElement('div');
+                    body.className = 'card-body';
+
+                    items.sort((a, b) => a.name.localeCompare(b.name));
+
+                    items.forEach(item => {
+                        const row = document.createElement('div');
+                        row.className = 'offset-row';
+                        row.dataset.searchText = (className + ' ' + item.name + ' ' + item.value).toLowerCase();
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'offset-name';
+                        nameSpan.textContent = item.name;
+                        nameSpan.title = item.name;
+
+                        const valueSpan = document.createElement('span');
+                        valueSpan.className = 'offset-value';
+                        valueSpan.textContent = item.value;
+
+                        row.appendChild(nameSpan);
+                        row.appendChild(valueSpan);
+                        body.appendChild(row);
+                        allRows.push(row);
+                    });
+
+                    card.appendChild(body);
+                    grid.appendChild(card);
+                    allCards.push(card);
+                });
+
+                // Applica filtro se presente
+                applyFilter(searchInput.value);
+            }
+
+            function showError(message) {
+                grid.innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <h3>Errore di caricamento</h3>
+                        <p>${escapeHtml(message)}</p>
+                    </div>
+                `;
+                versionText.textContent = 'Errore';
+            }
+
+            // ---- Fetch ----
+            async function fetchOffsets() {
+                refreshBtn.classList.add('loading');
+                refreshBtn.disabled = true;
+
+                // Mostra loading solo se non ci sono già card
+                if (allCards.length === 0) {
+                    grid.innerHTML = `
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p>Recupero offsets da xerozify.xyz...</p>
+                        </div>
+                    `;
+                }
+
+                try {
+                    const response = await fetch(API_URL, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    // Aggiorna badge versione
+                    if (data.version) {
+                        versionText.textContent = data.version;
+                    } else {
+                        versionText.textContent = 'N/D';
+                    }
+
+                    // Aggiorna timestamp
+                    const label = data.label || '';
+                    const updated = data.updated_at ? new Date(data.updated_at) : null;
+                    if (updated && !isNaN(updated)) {
+                        updateText.textContent = 'Aggiornato: ' + updated.toLocaleString('it-IT', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                        });
+                    } else if (label) {
+                        updateText.textContent = label;
+                    } else {
+                        updateText.textContent = 'Live API';
+                    }
+
+                    renderOffsets(data);
+                } catch (err) {
+                    console.error('Fetch error:', err);
+                    showError(err.message || 'Impossibile contattare l\'API. Riprova più tardi.');
+                } finally {
+                    refreshBtn.classList.remove('loading');
+                    refreshBtn.disabled = false;
+                }
+            }
+
+            // ---- Filtro di ricerca ----
+            function applyFilter(query) {
+                const q = query.trim().toLowerCase();
+                let visibleCount = 0;
+
+                allCards.forEach(card => {
+                    let cardVisible = false;
+                    const rows = card.querySelectorAll('.offset-row');
+                    rows.forEach(row => {
+                        const matches = q === '' || row.dataset.searchText.includes(q);
+                        row.classList.toggle('hidden', !matches);
+                        if (matches) {
+                            cardVisible = true;
+                            visibleCount++;
+                        }
+                    });
+                    card.classList.toggle('hidden', !cardVisible);
+                });
+
+                // Se nessun risultato, mostra empty state temporaneo
+                const existingEmpty = grid.querySelector('.search-empty');
+                if (visibleCount === 0 && q !== '') {
+                    if (!existingEmpty) {
+                        const empty = document.createElement('div');
+                        empty.className = 'empty-state search-empty';
+                        empty.innerHTML = `
+                            <i class="fas fa-magnifying-glass"></i>
+                            <p>Nessun risultato per "<strong>${escapeHtml(query)}</strong>"</p>
+                        `;
+                        grid.appendChild(empty);
+                    }
+                } else if (existingEmpty) {
+                    existingEmpty.remove();
+                }
+            }
+
+            // ---- Eventi ----
+            refreshBtn.addEventListener('click', fetchOffsets);
+
+            searchInput.addEventListener('input', (e) => {
+                applyFilter(e.target.value);
+            });
+
+            // Avvio
+            fetchOffsets();
+        })();
+    </script>
+</body>
+</html>

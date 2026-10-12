@@ -136,7 +136,6 @@ body {
 }
 .nav-logo { display: flex; align-items: center; gap: 0.85rem; cursor: pointer; transition: transform 0.3s; }
 .nav-logo:hover { transform: scale(1.05); }
-
 .nav-logo-img {
     width: 48px; height: 48px;
     border-radius: 12px;
@@ -223,7 +222,6 @@ body {
     justify-content: center;
     text-align: center;
     padding: 3rem 2rem;
-    position: relative;
 }
 .hero-badge {
     display: inline-flex;
@@ -555,7 +553,7 @@ body {
 .offsets-toolbar {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     padding: 1rem 2rem;
     flex-wrap: wrap;
     max-width: 1500px;
@@ -623,7 +621,7 @@ body {
     animation: borderGlow 4s infinite;
 }
 
-.refresh-btn {
+.refresh-btn, .raw-btn {
     background: linear-gradient(135deg, var(--viola-scuro), var(--viola), var(--magenta));
     background-size: 200% auto;
     border: none;
@@ -641,12 +639,23 @@ body {
     box-shadow: 0 4px 20px var(--ombra);
     white-space: nowrap;
 }
-.refresh-btn:hover {
+.refresh-btn:hover, .raw-btn:hover {
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 10px 35px rgba(168, 85, 247, 0.7);
     animation: gradientShift 2s ease infinite;
 }
 .refresh-btn.loading i { animation: spinFast 0.8s linear infinite; }
+
+.raw-btn {
+    background: linear-gradient(135deg, #0d0417, #1a0a2e);
+    border: 1px solid var(--viola);
+    color: var(--viola-luminoso);
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+.raw-btn:hover {
+    background: linear-gradient(135deg, var(--viola-scuro), var(--viola));
+    color: white;
+}
 
 /* OFFSETS LAYOUT */
 .offsets-layout {
@@ -946,6 +955,165 @@ body {
 .error-state h3 { color: #fca5a5; margin-bottom: 0.5rem; }
 .error-state p { color: var(--testo-secondario); font-size: 0.9rem; max-width: 500px; margin: 0 auto; }
 
+/* RAW MODAL */
+.raw-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+}
+.raw-modal-overlay.show { display: flex; align-items: center; justify-content: center; }
+
+.raw-modal {
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+    background: var(--sfondo-card);
+    border: 1px solid var(--viola);
+    border-radius: 1.5rem;
+    box-shadow: 0 30px 100px rgba(168, 85, 247, 0.4), 0 0 80px rgba(168, 85, 247, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease-out;
+}
+.raw-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(124, 58, 237, 0.08));
+    border-bottom: 1px solid var(--bordo);
+}
+.raw-modal-header h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--viola-luminoso);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+}
+.raw-modal-header h3 i {
+    animation: pulse 2s infinite;
+}
+.raw-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.raw-modal-close {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: var(--viola-chiaro);
+    width: 36px; height: 36px;
+    border-radius: 0.65rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+.raw-modal-close:hover {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: #f87171;
+    color: #fca5a5;
+    transform: rotate(90deg);
+}
+.raw-modal-body {
+    padding: 0;
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.raw-textarea-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+.raw-textarea {
+    width: 100%;
+    min-height: 400px;
+    max-height: 60vh;
+    padding: 1.25rem 1.5rem;
+    background: #0a0415;
+    color: var(--viola-luminoso);
+    border: none;
+    outline: none;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    resize: vertical;
+    white-space: pre;
+    overflow: auto;
+    caret-color: var(--viola);
+    letter-spacing: 0.01em;
+}
+.raw-textarea::selection {
+    background: var(--viola-scuro);
+    color: white;
+}
+.raw-modal-footer {
+    padding: 0.85rem 1.5rem;
+    background: rgba(168, 85, 247, 0.05);
+    border-top: 1px solid var(--bordo);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.raw-hint {
+    font-size: 0.78rem;
+    color: var(--testo-secondario);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.raw-hint kbd {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 0.4rem;
+    padding: 0.15rem 0.5rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--viola-luminoso);
+    box-shadow: 0 2px 0 rgba(168, 85, 247, 0.2);
+    font-weight: 700;
+}
+.raw-copy-btn {
+    background: linear-gradient(135deg, var(--viola-scuro), var(--viola), var(--magenta));
+    background-size: 200% auto;
+    border: none;
+    color: white;
+    padding: 0.65rem 1.3rem;
+    border-radius: 0.75rem;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px var(--ombra);
+}
+.raw-copy-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.7);
+    animation: gradientShift 2s ease infinite;
+}
+
 /* TOAST */
 .toast {
     position: fixed;
@@ -965,7 +1133,7 @@ body {
     box-shadow: 0 10px 50px rgba(168, 85, 247, 0.6);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 9999;
+    z-index: 10000;
     pointer-events: none;
     animation: gradientShift 3s ease infinite;
 }
@@ -1041,6 +1209,9 @@ body {
     .games-grid { padding: 1rem; }
     .page-header { padding: 2rem 1rem 1rem; }
     .hero-logo-wrapper { width: 130px; height: 130px; }
+    .raw-modal-overlay { padding: 0.5rem; }
+    .raw-modal { max-height: 95vh; }
+    .raw-textarea { min-height: 300px; font-size: 0.75rem; }
 }
 </style>
 </head>
@@ -1177,6 +1348,9 @@ body {
                     <i class="fas fa-tag"></i>
                     <span id="versionText">—</span>
                 </div>
+                <button class="raw-btn" id="rawBtn">
+                    <i class="fas fa-file-lines"></i> Show Raw
+                </button>
                 <button class="refresh-btn" id="refreshBtn">
                     <i class="fas fa-rotate-right"></i> Refresh
                 </button>
@@ -1217,6 +1391,33 @@ body {
         </footer>
     </div>
 
+    <!-- RAW MODAL -->
+    <div class="raw-modal-overlay" id="rawModalOverlay">
+        <div class="raw-modal">
+            <div class="raw-modal-header">
+                <h3><i class="fas fa-file-code"></i> Raw Offsets</h3>
+                <div class="raw-modal-actions">
+                    <button class="raw-modal-close" id="rawModalClose" title="Close">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="raw-modal-body">
+                <div class="raw-textarea-wrapper">
+                    <textarea class="raw-textarea" id="rawTextarea" readonly spellcheck="false"></textarea>
+                </div>
+            </div>
+            <div class="raw-modal-footer">
+                <div class="raw-hint">
+                    <kbd>Ctrl</kbd> + <kbd>A</kbd> to select all · <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy
+                </div>
+                <button class="raw-copy-btn" id="rawCopyBtn">
+                    <i class="fas fa-copy"></i> Copy All
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastText">Copied to clipboard!</span>
@@ -1226,8 +1427,7 @@ body {
         (function() {
             'use strict';
 
-            // API endpoint (not displayed to user)
-            const API_URL = 'https://xerozify.xyz/api/offsets/games/fortnite/current';
+            const API_URL = 'https://www.cheatoffsets.com/api/games/fortnite/current';
 
             const CATEGORY_ORDER = [
                 'Globals', 'engine', 'natives', 'FMemory', 'gworld_crypto', 'gobjects_crypto',
@@ -1345,7 +1545,6 @@ body {
                 return 'fa-folder';
             }
 
-            // PARTICLES
             (function createParticles() {
                 const container = document.getElementById('particles');
                 const count = 25;
@@ -1363,7 +1562,6 @@ body {
                 }
             })();
 
-            // NAV
             const pages = {
                 home: document.getElementById('page-home'),
                 games: document.getElementById('page-games'),
@@ -1383,7 +1581,6 @@ body {
             }
             window.navigateTo = navigateTo;
 
-            // TOAST
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
             let toastTimeout;
@@ -1394,18 +1591,49 @@ body {
                 toastTimeout = setTimeout(() => toast.classList.remove('show'), 2200);
             }
 
-            // OFFSETS
+            // ---- OFFSETS ----
             let currentData = null;
+            let currentRaw = '';
             let allSections = [];
             let allCategoryItems = [];
 
-            function parseCategory(key) {
-                const parts = key.split('::');
-                if (parts.length < 2) return { category: 'Globals', name: key };
-                return {
-                    category: parts.slice(0, -1).join('::'),
-                    name: parts[parts.length - 1]
-                };
+            // Parse markdown containing `struct Nome { ... inline static constexpr uintptr_t Field = 0x...; ... };`
+            function parseMarkdown(md) {
+                if (!md || typeof md !== 'string') return {};
+                const grouped = {};
+                // Match struct blocks: `struct Name {` ... `};`
+                const structRegex = /struct\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{([\s\S]*?)\}\s*;/g;
+                let match;
+                while ((match = structRegex.exec(md)) !== null) {
+                    const structName = match[1];
+                    const body = match[2];
+                    if (!grouped[structName]) grouped[structName] = [];
+                    // Match each "inline static constexpr uintptr_t Name = value;" (value can be hex or decimal)
+                    const fieldRegex = /inline\s+static\s+constexpr\s+uintptr_t\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^;]+);/g;
+                    let fieldMatch;
+                    while ((fieldMatch = fieldRegex.exec(body)) !== null) {
+                        const fieldName = fieldMatch[1];
+                        const rawVal = fieldMatch[2].trim();
+                        // Keep as-is (e.g. "0x1b1d12f8" or "0x18")
+                        grouped[structName].push({ name: fieldName, value: rawVal });
+                    }
+                }
+                return grouped;
+            }
+
+            // Build raw text from grouped data: `Category::Name = value` per line
+            function buildRawText(grouped) {
+                const lines = [];
+                const orderedCats = CATEGORY_ORDER.filter(c => grouped[c]);
+                const otherCats = Object.keys(grouped).filter(c => !CATEGORY_ORDER.includes(c)).sort();
+                const finalCats = [...orderedCats, ...otherCats];
+                for (const cat of finalCats) {
+                    const items = grouped[cat].slice().sort((a, b) => a.name.localeCompare(b.name));
+                    for (const item of items) {
+                        lines.push(`${cat}::${item.name} = ${item.value}`);
+                    }
+                }
+                return lines.join('\n');
             }
 
             async function loadFortniteOffsets() {
@@ -1421,7 +1649,10 @@ body {
                     if (!response.ok) throw new Error('HTTP ' + response.status);
                     const data = await response.json();
                     currentData = data;
-                    renderOffsets(data);
+
+                    const grouped = parseMarkdown(data.markdown || '');
+                    currentRaw = buildRawText(grouped);
+                    renderOffsets(grouped);
 
                     const versionInfo = document.getElementById('versionInfo');
                     const versionText = document.getElementById('versionText');
@@ -1444,29 +1675,19 @@ body {
                 }
             }
 
-            function renderOffsets(data) {
-                const offsets = data.offsets_flat;
-                if (!offsets || typeof offsets !== 'object') throw new Error('Invalid format');
-
-                const grouped = {};
-                for (const [key, value] of Object.entries(offsets)) {
-                    const { category, name } = parseCategory(key);
-                    if (!grouped[category]) grouped[category] = [];
-                    grouped[category].push({ name, value });
-                }
-
-                const knownCategories = CATEGORY_ORDER.filter(c => grouped[c]);
-                const unknownCategories = Object.keys(grouped)
-                    .filter(c => !CATEGORY_ORDER.includes(c))
-                    .sort();
-                const sortedCategories = [...knownCategories, ...unknownCategories];
-
+            function renderOffsets(grouped) {
                 const content = document.getElementById('offsetsContent');
                 const categoryList = document.getElementById('categoryList');
                 content.innerHTML = '';
                 categoryList.innerHTML = '';
                 allSections = [];
                 allCategoryItems = [];
+
+                const knownCategories = CATEGORY_ORDER.filter(c => grouped[c]);
+                const unknownCategories = Object.keys(grouped)
+                    .filter(c => !CATEGORY_ORDER.includes(c))
+                    .sort();
+                const sortedCategories = [...knownCategories, ...unknownCategories];
 
                 if (sortedCategories.length === 0) {
                     content.innerHTML = `
@@ -1479,8 +1700,7 @@ body {
                 }
 
                 sortedCategories.forEach((catName, index) => {
-                    const items = grouped[catName];
-                    items.sort((a, b) => a.name.localeCompare(b.name));
+                    const items = grouped[catName].slice().sort((a, b) => a.name.localeCompare(b.name));
 
                     const catItem = document.createElement('div');
                     catItem.className = 'category-item';
@@ -1604,7 +1824,74 @@ body {
 
             document.getElementById('refreshBtn').addEventListener('click', () => {
                 currentData = null;
+                currentRaw = '';
                 loadFortniteOffsets();
+            });
+
+            // ---- RAW MODAL ----
+            const rawModalOverlay = document.getElementById('rawModalOverlay');
+            const rawTextarea = document.getElementById('rawTextarea');
+            const rawBtn = document.getElementById('rawBtn');
+            const rawModalClose = document.getElementById('rawModalClose');
+            const rawCopyBtn = document.getElementById('rawCopyBtn');
+
+            function openRawModal() {
+                if (!currentRaw) {
+                    if (!currentData) {
+                        showToast('Loading offsets... please wait');
+                        loadFortniteOffsets();
+                        return;
+                    }
+                    const grouped = parseMarkdown(currentData.markdown || '');
+                    currentRaw = buildRawText(grouped);
+                }
+                rawTextarea.value = currentRaw;
+                rawModalOverlay.classList.add('show');
+                // Auto-select all
+                setTimeout(() => {
+                    rawTextarea.focus();
+                    rawTextarea.select();
+                    rawTextarea.setSelectionRange(0, rawTextarea.value.length);
+                }, 80);
+            }
+
+            function closeRawModal() {
+                rawModalOverlay.classList.remove('show');
+            }
+
+            rawBtn.addEventListener('click', openRawModal);
+            rawModalClose.addEventListener('click', closeRawModal);
+            rawModalOverlay.addEventListener('click', (e) => {
+                if (e.target === rawModalOverlay) closeRawModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && rawModalOverlay.classList.contains('show')) {
+                    closeRawModal();
+                }
+                // Ctrl+A inside raw modal: select all
+                if (rawModalOverlay.classList.contains('show') && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+                    e.preventDefault();
+                    rawTextarea.focus();
+                    rawTextarea.select();
+                    rawTextarea.setSelectionRange(0, rawTextarea.value.length);
+                }
+                // Ctrl+C inside raw modal: copy
+                if (rawModalOverlay.classList.contains('show') && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
+                    // Native copy works; no need to intercept, but if user pressed with nothing selected, copy all
+                    if (rawTextarea.selectionStart === rawTextarea.selectionEnd && rawTextarea.value.length > 0) {
+                        e.preventDefault();
+                        copyToClipboard(rawTextarea.value);
+                    }
+                }
+            });
+
+            rawCopyBtn.addEventListener('click', () => {
+                const text = rawTextarea.value || currentRaw;
+                if (!text) {
+                    showToast('Nothing to copy');
+                    return;
+                }
+                copyToClipboard(text);
             });
 
             window.copyToClipboard = copyToClipboard;

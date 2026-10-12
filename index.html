@@ -1000,14 +1000,7 @@ body {
     gap: 0.6rem;
     text-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
 }
-.raw-modal-header h3 i {
-    animation: pulse 2s infinite;
-}
-.raw-modal-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+.raw-modal-header h3 i { animation: pulse 2s infinite; }
 .raw-modal-close {
     background: rgba(168, 85, 247, 0.15);
     border: 1px solid rgba(168, 85, 247, 0.3);
@@ -1079,6 +1072,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 .raw-hint kbd {
     background: rgba(168, 85, 247, 0.15);
@@ -1396,11 +1390,9 @@ body {
         <div class="raw-modal">
             <div class="raw-modal-header">
                 <h3><i class="fas fa-file-code"></i> Raw Offsets</h3>
-                <div class="raw-modal-actions">
-                    <button class="raw-modal-close" id="rawModalClose" title="Close">
-                        <i class="fas fa-xmark"></i>
-                    </button>
-                </div>
+                <button class="raw-modal-close" id="rawModalClose" title="Close">
+                    <i class="fas fa-xmark"></i>
+                </button>
             </div>
             <div class="raw-modal-body">
                 <div class="raw-textarea-wrapper">
@@ -1409,7 +1401,7 @@ body {
             </div>
             <div class="raw-modal-footer">
                 <div class="raw-hint">
-                    <kbd>Ctrl</kbd> + <kbd>A</kbd> to select all · <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy
+                    <kbd>Ctrl</kbd> + <kbd>A</kbd> select all · <kbd>Ctrl</kbd> + <kbd>C</kbd> copy
                 </div>
                 <button class="raw-copy-btn" id="rawCopyBtn">
                     <i class="fas fa-copy"></i> Copy All
@@ -1427,7 +1419,7 @@ body {
         (function() {
             'use strict';
 
-            const API_URL = 'https://www.cheatoffsets.com/api/games/fortnite/current';
+            const API_URL = 'https://xerozify.xyz/api/offsets/games/fortnite/current';
 
             const CATEGORY_ORDER = [
                 'Globals', 'engine', 'natives', 'FMemory', 'gworld_crypto', 'gobjects_crypto',
@@ -1597,31 +1589,15 @@ body {
             let allSections = [];
             let allCategoryItems = [];
 
-            // Parse markdown containing `struct Nome { ... inline static constexpr uintptr_t Field = 0x...; ... };`
-            function parseMarkdown(md) {
-                if (!md || typeof md !== 'string') return {};
-                const grouped = {};
-                // Match struct blocks: `struct Name {` ... `};`
-                const structRegex = /struct\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{([\s\S]*?)\}\s*;/g;
-                let match;
-                while ((match = structRegex.exec(md)) !== null) {
-                    const structName = match[1];
-                    const body = match[2];
-                    if (!grouped[structName]) grouped[structName] = [];
-                    // Match each "inline static constexpr uintptr_t Name = value;" (value can be hex or decimal)
-                    const fieldRegex = /inline\s+static\s+constexpr\s+uintptr_t\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([^;]+);/g;
-                    let fieldMatch;
-                    while ((fieldMatch = fieldRegex.exec(body)) !== null) {
-                        const fieldName = fieldMatch[1];
-                        const rawVal = fieldMatch[2].trim();
-                        // Keep as-is (e.g. "0x1b1d12f8" or "0x18")
-                        grouped[structName].push({ name: fieldName, value: rawVal });
-                    }
-                }
-                return grouped;
+            function parseCategory(key) {
+                const parts = key.split('::');
+                if (parts.length < 2) return { category: 'Globals', name: key };
+                return {
+                    category: parts.slice(0, -1).join('::'),
+                    name: parts[parts.length - 1]
+                };
             }
 
-            // Build raw text from grouped data: `Category::Name = value` per line
             function buildRawText(grouped) {
                 const lines = [];
                 const orderedCats = CATEGORY_ORDER.filter(c => grouped[c]);
@@ -1650,7 +1626,13 @@ body {
                     const data = await response.json();
                     currentData = data;
 
-                    const grouped = parseMarkdown(data.markdown || '');
+                    const offsets = data.offsets_flat || {};
+                    const grouped = {};
+                    for (const [key, value] of Object.entries(offsets)) {
+                        const { category, name } = parseCategory(key);
+                        if (!grouped[category]) grouped[category] = [];
+                        grouped[category].push({ name, value });
+                    }
                     currentRaw = buildRawText(grouped);
                     renderOffsets(grouped);
 
@@ -1842,12 +1824,17 @@ body {
                         loadFortniteOffsets();
                         return;
                     }
-                    const grouped = parseMarkdown(currentData.markdown || '');
+                    const offsets = currentData.offsets_flat || {};
+                    const grouped = {};
+                    for (const [key, value] of Object.entries(offsets)) {
+                        const { category, name } = parseCategory(key);
+                        if (!grouped[category]) grouped[category] = [];
+                        grouped[category].push({ name, value });
+                    }
                     currentRaw = buildRawText(grouped);
                 }
                 rawTextarea.value = currentRaw;
                 rawModalOverlay.classList.add('show');
-                // Auto-select all
                 setTimeout(() => {
                     rawTextarea.focus();
                     rawTextarea.select();
@@ -1868,16 +1855,13 @@ body {
                 if (e.key === 'Escape' && rawModalOverlay.classList.contains('show')) {
                     closeRawModal();
                 }
-                // Ctrl+A inside raw modal: select all
                 if (rawModalOverlay.classList.contains('show') && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
                     e.preventDefault();
                     rawTextarea.focus();
                     rawTextarea.select();
                     rawTextarea.setSelectionRange(0, rawTextarea.value.length);
                 }
-                // Ctrl+C inside raw modal: copy
                 if (rawModalOverlay.classList.contains('show') && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
-                    // Native copy works; no need to intercept, but if user pressed with nothing selected, copy all
                     if (rawTextarea.selectionStart === rawTextarea.selectionEnd && rawTextarea.value.length > 0) {
                         e.preventDefault();
                         copyToClipboard(rawTextarea.value);
@@ -1887,10 +1871,7 @@ body {
 
             rawCopyBtn.addEventListener('click', () => {
                 const text = rawTextarea.value || currentRaw;
-                if (!text) {
-                    showToast('Nothing to copy');
-                    return;
-                }
+                if (!text) { showToast('Nothing to copy'); return; }
                 copyToClipboard(text);
             });
 
